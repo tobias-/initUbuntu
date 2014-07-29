@@ -61,17 +61,6 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		cp scripts/mapLocalhost /etc/network/if-up.d/mapLocalhost
 	fi
 
-	if [ ! -d /etc/.git ]; then
-		aptGet git
-		cd /etc
-		git init .
-		chmod 0700 .git
-		echo dG1wCiouc3dwCnF1ZXVlCg== | base64 -d >.gitignore
-		git add .
-		git commit -m "Initial commit"
-		echo '* * * * * cd /etc ; git reset master ; git add . ; git commit -q -a -m "Crontabbed update" >/dev/null' >/etc/cron.d/etc_git
-	fi
-
 	if [ ! -f nullmailer.base64 ] && ! installed nullmailer; then
 		if [ ! -d nullmailer ]; then
 			base64 -d <nullmailer.base64 | tar jx
@@ -81,6 +70,23 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	else
 		echo "Need nullmailer config. Contains passwords, so not public"
 		exit 1
+	fi
+
+	if [ ! -d /etc/.git ]; then
+		aptGet git
+		cd /etc
+		git init .
+		chmod 0700 .git
+		echo dG1wCiouc3dwCnF1ZXVlCg== | base64 -d >.gitignore
+		git add .
+		email=$(git config --global --get user.email)
+		if [[ -z $name ]]; then
+			hostname=$(cat /etc/mailname)
+			git config --global user.email "nobody@$hostname"
+			git config --global user.name "Nobody"
+		fi
+		git commit -m "Initial commit"
+		echo '* * * * * cd /etc ; git reset master ; git add . ; git commit -q -a -m "Crontabbed update" >/dev/null' >/etc/cron.d/etc_git
 	fi
 
 fi

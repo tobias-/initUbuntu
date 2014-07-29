@@ -76,16 +76,16 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	if [ ! -d /etc/.git ]; then
 		aptGet git
 		cd /etc
-		git init .
-		chmod 0700 .git
-		echo dG1wCiouc3dwCnF1ZXVlCg== | base64 -d >.gitignore
-		git add .
-		email=$(git config --global --get user.email)
-		if [[ -z $name ]]; then
+		email=$(git config --global --get user.email || true)
+		if [[ -z $email ]]; then
 			hostname=$(cat /etc/mailname)
 			git config --global user.email "nobody@$hostname"
 			git config --global user.name "Nobody"
 		fi
+		git init .
+		chmod 0700 .git
+		echo dG1wCiouc3dwCnF1ZXVlCg== | base64 -d >.gitignore
+		git add .
 		git commit -m "Initial commit"
 		echo '* * * * * cd /etc ; git reset master ; git add . ; git commit -q -a -m "Crontabbed update" >/dev/null' >/etc/cron.d/etc_git
 	fi

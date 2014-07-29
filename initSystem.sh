@@ -68,6 +68,11 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		exit 1
 	fi
 
+	if [ ! -f /etc/network/if-up.d/mapLocalhost ]; then
+		cp scripts/mapLocalhost /etc/network/if-up.d/mapLocalhost
+	fi
+
+
 	if [ ! -d /etc/.git ]; then
 		aptGet git
 		cd /etc

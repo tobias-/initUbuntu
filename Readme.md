@@ -13,8 +13,8 @@ wget -O ./initSystem.sh https://raw.githubusercontent.com/tobias-/initUbuntu/mas
 ##Programs installed
 * **Java** All modern versions (6, 7, 8) including JCE
 * **Groovy** Latest & greatest version in ubuntu repo
-* **Ruby** Latest & greatest version (at the moment)
-* **Ruby aws** Gem installed version of ruby-aws
+* ~~**Ruby** Latest & greatest version (at the moment)~~
+* ~~**Ruby aws** Gem installed version of ruby-aws~~
 * **Locales** Locales installed because I use them
 * **Various tools** 7zip, tcpdump, zip, unzip etc
 * **Cronic** Patched version to only mail stderr or failed programs from cron

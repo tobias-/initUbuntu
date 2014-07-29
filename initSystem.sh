@@ -22,7 +22,7 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	locale-gen en_US.UTF-8 sv_SE.UTF-8
 	dpkg-reconfigure locales
 
-	if [ ! -x /usr/local/bin/aws-rb ]; then
+	if false && [ ! -x /usr/local/bin/aws-rb ]; then
 		add-apt-repository ppa:brightbox/ruby-ng
 		apt-get update
 		apt-get install ruby2.1 build-essential ruby2.1-dev

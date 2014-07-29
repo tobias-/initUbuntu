@@ -61,15 +61,16 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		cp scripts/mapLocalhost /etc/network/if-up.d/mapLocalhost
 	fi
 
-	if [ ! -f nullmailer.base64 ] && ! installed nullmailer; then
+	if ! installed nullmailer; then
+		if [ ! -f nullmailer.base64 ] && [ ! -d nullmailer ]; then
+			echo "Need nullmailer config. Contains passwords, so not public"
+			exit 1
+		fi
 		if [ ! -d nullmailer ]; then
 			base64 -d <nullmailer.base64 | tar jx
 		fi
 		rsync -Pr nullmailer/ /etc/nullmailer/
 		aptGet nullmailer
-	else
-		echo "Need nullmailer config. Contains passwords, so not public"
-		exit 1
 	fi
 
 	if [ ! -d /etc/.git ]; then

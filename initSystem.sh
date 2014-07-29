@@ -62,7 +62,7 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	fi
 
 	if ! installed nullmailer; then
-		if [ ! -f nullmailer.base64 ] && [ ! -d nullmailer ]; then
+		if [ ! -s nullmailer.base64 ] && [ ! -d nullmailer ]; then
 			echo "Need nullmailer config. Contains passwords, so not public"
 			exit 1
 		fi

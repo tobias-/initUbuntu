@@ -12,8 +12,10 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 
 	
 	if [ ! -d .git ]; then
-		aptGet git
-		git clone https://github.com/tobias-/initUbuntu
+		if [ ! -d initUbuntu ]; then
+			aptGet git
+			git clone https://github.com/tobias-/initUbuntu
+		fi
 		cd initUbuntu
 	fi
 

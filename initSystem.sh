@@ -3,7 +3,7 @@
 
 if [ $(whoami) != root ]; then
 	chmod a+rx $0
-	exec sudo -i $0
+	exec sudo $0
 fi
 
 if ! ps ax | grep "^ *$$.*bash -eux"; then

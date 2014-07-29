@@ -21,4 +21,5 @@ wget https://github.com/tobias-/initUbuntu/initSystem.sh && sudo bash -eux ./ini
 * **Nullmailer** Install and configure nullmailer (requires tar.bz2 and base64 /etc/nullmailer
 * **Inputrc** Alternative Ctrl-PgUp and Ctrl-PgDown
 * **Git /etc** get all of /etc version controlled in case bad stuff happens
+
 .. + probably something I forgot

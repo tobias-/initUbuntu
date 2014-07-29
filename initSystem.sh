@@ -1,8 +1,8 @@
 #!/bin/bash -eux
 
 if [ $(whoami) != root ]; then
-	echo "Not root. Not continuing"
-	exit 1
+	chmod a+rx $0
+	exec sudo -i $0
 fi
 
 key=$(md5sum $0 | cut -d' ' -f1)

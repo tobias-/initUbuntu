@@ -1,13 +1,9 @@
 #!/bin/bash -eux
 
 
-if [ $(whoami) != root ]; then
+if [ $(whoami) != root ] || ! ps ax | grep -q "^ *$$.*bash -eux"; then
 	chmod a+rx $0
 	exec sudo $0
-fi
-
-if ! ps ax | grep "^ *$$.*bash -eux"; then
-	exec $0
 fi
 
 key=$(md5sum $0 | cut -d' ' -f1)

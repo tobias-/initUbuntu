@@ -8,7 +8,7 @@ particular project is not a collaborative project so I won''t fix anything
 that works for me.
 
 ##Install
-wget https://github.com/tobias-/initUbuntu/initSystem.sh && sudo bash -eux ./initSystem.sh
+wget https://raw.githubusercontent.com/tobias-/initUbuntu/master/initSystem.sh && sudo bash -eux ./initSystem.sh
 
 ##Programs installed
 * **Java** All modern versions (6, 7, 8) including JCE

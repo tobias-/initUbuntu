@@ -90,6 +90,7 @@ condCp() {
 		cd $1
 		for A in *; do
 			if ! diff -q $A $2/$A; then
+				[ -f $2/$A ] && diff $A $2/$A
 				cp -i $A $2
 			fi
 		done

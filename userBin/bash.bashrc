@@ -11,7 +11,7 @@ add_path() {
 
 
 redot() {
-	for A in ~/bin/*.bashrc; do 
+	for A in ~/bin/*.bashrc; do
 		. "$A"
 	done
 }

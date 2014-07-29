@@ -40,14 +40,16 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 
 		echo
 		echo Installing JCE for the oracle java
-		tmp=`mktemp -d`
-		extractJceProfile $tmp
-		cd /usr/lib/jvm/java-6-oracle/jre/lib/security
-		unzip -jo $tmp/jce_policy-6.zip */*.jar
-		cd /usr/lib/jvm/java-7-oracle/jre/lib/security
-		unzip -jo $tmp/UnlimitedJCEPolicyJDK7.zip */*.jar
-		cd /usr/lib/jvm/java-8-oracle/jre/lib/security
-		unzip -jo $tmp/jce_policy-8.zip */*.jar
+		(
+			tmp=`mktemp -d`
+			extractJceProfile $tmp
+			cd /usr/lib/jvm/java-6-oracle/jre/lib/security
+			unzip -jo $tmp/jce_policy-6.zip */*.jar
+			cd /usr/lib/jvm/java-7-oracle/jre/lib/security
+			unzip -jo $tmp/UnlimitedJCEPolicyJDK7.zip */*.jar
+			cd /usr/lib/jvm/java-8-oracle/jre/lib/security
+			unzip -jo $tmp/jce_policy-8.zip */*.jar
+		)
 	fi
 	
 

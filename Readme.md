@@ -24,5 +24,7 @@ cd initUbuntu &&
 * **Nullmailer** Install and configure nullmailer (requires tar.bz2 and base64 /etc/nullmailer
 * **Inputrc** Alternative Ctrl-PgUp and Ctrl-PgDown
 * **Git /etc** get all of /etc version controlled in case bad stuff happens
+* **mongo** mongo from mongodb
+* **mms-agent** mms-agent installation and autostart
 
 .. + probably something I forgot

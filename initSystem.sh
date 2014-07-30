@@ -10,6 +10,8 @@ key=$(md5sum $0 | cut -d' ' -f1)
 if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	source $0 $key
 
+	apt-get update
+	apt-get -u dist-upgrade
 	
 	if [ ! -d .git ]; then
 		if [ ! -d initUbuntu ]; then

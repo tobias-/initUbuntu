@@ -10,8 +10,6 @@ key=$(md5sum $0 | cut -d' ' -f1)
 if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	source $0 $key
 
-	apt-get update
-	apt-get -u dist-upgrade
 	
 	if [ ! -d .git ]; then
 		if [ ! -d initUbuntu ]; then
@@ -25,6 +23,9 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 
 	locale-gen en_US.UTF-8 sv_SE.UTF-8
 	dpkg-reconfigure locales
+
+	apt-get update
+	apt-get -u dist-upgrade
 
 	if false && [ ! -x /usr/local/bin/aws-rb ]; then
 		add-apt-repository ppa:brightbox/ruby-ng

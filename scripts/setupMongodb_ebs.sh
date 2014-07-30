@@ -66,17 +66,18 @@ busywait() {
 echo
 echo "Creating filesystems. This may take a while"
 echo
+mkfs.ext4 -q /dev/xvdd -L mongoData &
+mkfs.ext4 -q /dev/xvdj -L mongoJournal &
+mkfs.ext4 -q /dev/xvdl -L mongoLog &
+wait
 busywait /dev/xvdd
-mkfs.ext4 -q /dev/xvdd -L mongoData
 busywait /dev/xvdj
-mkfs.ext4 -q /dev/xvdj -L mongoJournal
 busywait /dev/xvdl
-mkfs.ext4 -q /dev/xvdl -L mongoLog
 
 echo "Mounting filesystems"
-mount /log
-mount /journal
 mount /data
+mount /journal
+mount /log
 
 chown -R mongodb:mongodb /log /journal /data
 ln -s /journal /data/journal

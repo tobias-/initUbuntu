@@ -31,7 +31,6 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		gem install aws-sdk
 	fi
 
-	aptGet groovy
 	aptGet unzip p7zip-full zip tcpdump
 
 	if ! installed oracle-java8-installer; then
@@ -54,6 +53,7 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		)
 	fi
 	
+	aptGet groovy
 
 	sed -r 's/^# *(.*history-search-.*)/\1/g' -i /etc/inputrc
 

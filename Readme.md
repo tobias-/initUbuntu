@@ -8,6 +8,7 @@ particular project is not a collaborative project so I won''t fix anything
 that works for me.
 
 ##Install
+apt-get install -y git &&
 git clone https://github.com/tobias-/initUbuntu &&
 cd initUbuntu &&
 ./initSystem.sh

@@ -64,15 +64,12 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 	fi
 
 	if ! installed nullmailer; then
-		if [ ! -s nullmailer.base64 ] && [ ! -d nullmailer ]; then
-			echo "Need nullmailer config. Contains passwords, so not public"
-			exit 1
+		echo Input nullmailer config as tar.bz2.base64 or nothing. End with ctrl-d
+		cat >nullmailer.base64
+		if [ -s nullmailer.base64 ]; then
+			( cd /etc ; base64 -d <nullmailer.base64 | tar jx )
+			aptGet nullmailer
 		fi
-		if [ ! -d nullmailer ]; then
-			base64 -d <nullmailer.base64 | tar jx
-		fi
-		rsync -Pr nullmailer/ /etc/nullmailer/
-		aptGet nullmailer
 	fi
 
 	if [ ! -d /etc/.git ]; then

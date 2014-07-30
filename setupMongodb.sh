@@ -12,7 +12,7 @@ fi
 
 read -p 'Use [E]bs or [I]nstance storage? (E/I) ' A
 if [[ $A == [eE] ]]; then
-	exec ${0%%.sh}_ebs.sh
+	exec scripts/setupMongodb_ebs.sh
 elif [[ $A == [iI] ]]; then
 	mkdir -p /log
 	mkdir -p /mnt/data

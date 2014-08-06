@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -eux
 
 echo "This command should probably be run on your desktop client to avoid putting dangerous keys on server."
 echo "Confirm that you know this (Enter continue & Ctrl-C to abort)"
@@ -8,7 +8,7 @@ read A
 
 SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
 
-. $SCRIPT_HOME/functions.bash
+. $SCRIPT_HOME/scripts/functions.bash
 
 if ! installed awscli; then
 	sudo apt-get install awscli
@@ -20,7 +20,7 @@ if ! installed awscli; then
 fi
 
 
-if [[ ! -v BASH_ARGV[2] ]]; then
+if [[ $# -ne 2 ]]; then
 	echo "Usage: $0 <region> <instanceId>"
 	exit 1
 fi
@@ -29,7 +29,7 @@ region="$1"
 instanceId="$2"
 echo "This host's Instance Id: $instanceId"
 
-zone=$(/usr/local/bin/aws --region $region ec2 describe-instances  | ./scripts/getAZ.groovy)
+zone=$(aws --region $region ec2 describe-instances  | $SCRIPT_HOME/scripts/getAZ.groovy $instanceId)
 echo Availability zone: $zone
 
 read -p "How large do you want your database in GiB? " -e -i 400 dbSize

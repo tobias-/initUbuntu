@@ -9,7 +9,7 @@ fi
 SHARD=$1
 SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
 
-. $SCRIPT_HOME/script/functions.bash
+. $SCRIPT_HOME/scripts/functions.bash
 
 if ! installed mongodb; then
 	echo "Installing mongo first"

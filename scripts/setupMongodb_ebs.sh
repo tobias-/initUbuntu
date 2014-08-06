@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -eu
 
 SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
 

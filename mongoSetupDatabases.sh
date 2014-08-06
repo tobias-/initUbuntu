@@ -20,7 +20,7 @@ else
 	case $A in
 	[Aa])
 		dd if=/dev/zero bs=1M seek=1023 count=1 of=/log_filesystem
-		mkfs.ext4 -f /log_filesystem
+		mkfs.ext4 -F /log_filesystem
 		echo "/log_filesystem /log ext4 defaults,noatime,loop,auto 0 0" >>/etc/fstab
 		mkdir -p /data
 		mkdir -p /log

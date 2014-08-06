@@ -11,7 +11,7 @@ SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
 
 . $SCRIPT_HOME/scripts/functions.bash
 
-if ! installed mongodb; then
+if ! installed mongodb-org; then
 	echo "Installing mongo first"
 	$SCRIPT_HOME/mongoInstallOrUpgrade.sh
 fi

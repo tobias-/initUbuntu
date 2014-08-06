@@ -10,7 +10,7 @@ SHARD=$1
 
 if [[ $(id -u) != 0 ]]; then
 	echo "Restarting as root"
-	exec sudo $0
+	exec sudo $0 "$@"
 fi
 
 if [ -d /data ]; then

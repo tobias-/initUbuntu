@@ -36,7 +36,7 @@ if [ -s mms-agent.tar.gz.base64 ]; then
 	ps afx | egrep --color=always '(|mms-agent)'
 	echo "Trying 5 times to be sure it's not just being restarted"
 	a=0
-	while [ $a -lt 5 ] && !status mms-agent ; do
+	while [ $a -lt 5 ] && ! status mms-agent ; do
 	    sleep 2
 		let a++
 	done

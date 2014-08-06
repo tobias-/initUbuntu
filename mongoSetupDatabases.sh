@@ -10,7 +10,7 @@ if [ -d /data ]; then
 else
 	read -p 'Use [E]bs or [I]nstance storage? (E/I) ' A
 	if [[ $A == [eE] ]]; then
-		scripts/setupMongodb_ebs.sh
+		scripts/mongoSetupDatabases_ebs.sh
 	elif [[ $A == [iI] ]]; then
 		mkdir -p /log
 		mkdir -p /mnt/data

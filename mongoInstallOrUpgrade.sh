@@ -10,7 +10,6 @@ markMongo() {
 	[[ -n $1 ]]
 	apt-mark $1 mongodb-org mongodb-org-server mongodb-org-shell mongodb-org-mongos mongodb-org-tools
 }
-	
 
 if ! installed mongodb-org; then
 	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10

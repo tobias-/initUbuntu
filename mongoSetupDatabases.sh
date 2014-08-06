@@ -16,17 +16,30 @@ fi
 if [ -d /data ]; then
 	echo "You already have a /data directory"
 else
-	read -p 'Use [E]bs or [I]nstance storage? (E/I) ' A
-	if [[ $A == [eE] ]]; then
+	read -p 'Use [E]bs, [I]nstance or [A]rbiter storage? (E/I/A) ' A
+	case $A in
+	[Aa])
+		mkdir -p /data
+		dd if=/dev/zero bs=1024M seek=1023 count=1 of=/log_filesystem
+		mkfs.ext4 -f /log_filesystem
+		echo "/log_filesystem /log ext4 defaults,noatime,loop,auto 0 0" >>/etc/fstab
+		mount /log
+		chown -R mongodb:mongodb /data /log
+	;;
+	[Ee])
 		scripts/mongoSetupDatabases_ebs.sh
-	elif [[ $A == [iI] ]]; then
+	;;
+	[Ii])
 		mkdir -p /log
 		mkdir -p /mnt/data
 		chown -R mongodb:mongodb /mnt/data /log
-		sudo ln -s /mnt/data /data
-	else
+		ln -s /mnt/data /data
+		;;
+	*)
 		echo "You failed"
-	fi
+		exit 1
+		;;
+	esac
 fi
 
 

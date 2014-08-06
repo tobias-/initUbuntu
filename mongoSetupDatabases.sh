@@ -101,7 +101,7 @@ else
 fi
 
 
-sudo restart mongod
+restart mongod || start mongod
 
 echo "Input mms-agent as tar.gz.base64. End with ctrl-d on empty line"
 cat >mms-agent.tar.gz.base64

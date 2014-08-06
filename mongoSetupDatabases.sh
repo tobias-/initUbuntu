@@ -19,10 +19,11 @@ else
 	read -p 'Use [E]bs, [I]nstance or [A]rbiter storage? (E/I/A) ' A
 	case $A in
 	[Aa])
-		mkdir -p /data
 		dd if=/dev/zero bs=1M seek=1023 count=1 of=/log_filesystem
 		mkfs.ext4 -f /log_filesystem
 		echo "/log_filesystem /log ext4 defaults,noatime,loop,auto 0 0" >>/etc/fstab
+		mkdir -p /data
+		mkdir -p /log
 		mount /log
 		chown -R mongodb:mongodb /data /log
 	;;

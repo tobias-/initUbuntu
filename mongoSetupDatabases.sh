@@ -1,5 +1,13 @@
 #!/bin/bash -eu
 
+if [ $# -ne 1 ]; then
+	echo "Usage: $0 <ShardID>"
+	echo "E.g.: $0 Shard1"
+	exit 1
+fi
+
+SHARD=$1
+
 if [[ $(id -u) != 0 ]]; then
 	echo "Restarting as root"
 	exec sudo $0
@@ -21,6 +29,36 @@ else
 	fi
 fi
 
+
+cat >/etc/mongod.conf <<EOF
+systemLog:
+   destination: file
+   path: "/log/mongodb.log"
+   quiet: true
+   logAppend: true
+   timeStampFormat: iso8601-utc
+
+storage:
+   dbPath: /data
+
+processManagement:
+   fork: false
+
+net:
+   port: 27017
+   http:
+       enabled: true
+       RESTInterfaceEnabled: true
+
+replication:
+    replSetName: $SHARD
+
+operationProfiling:
+# Disable profiling logging
+    mode: off
+
+EOF
+sudo restart mongod
 
 echo "Input mms-agent as tar.gz.base64. End with ctrl-d on empty line"
 cat >mms-agent.tar.gz.base64

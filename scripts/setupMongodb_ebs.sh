@@ -1,10 +1,18 @@
 #!/bin/bash -eux
 
+SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
 
 if [[ $(id -u) != 0 ]]; then
 	echo "Must be run as root"
 	exit 1
 fi
+
+. $SCRIPT_HOME/functions.bash
+
+if ! installed awscli; then
+	apt-get install awscli
+fi
+
 
 instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 echo "This host's Instance Id: $instanceId"

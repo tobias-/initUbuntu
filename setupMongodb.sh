@@ -1,8 +1,8 @@
 #!/bin/bash -eu
 
 if [[ $(id -u) != 0 ]]; then
-	echo "Must be run as root"
-	exit 1
+	echo "Restarting as root"
+	exec $0
 fi
 
 if [ -d /data ]; then

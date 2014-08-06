@@ -7,6 +7,15 @@ if [ $# -ne 1 ]; then
 fi
 
 SHARD=$1
+SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
+
+. $SCRIPT_HOME/script/functions.bash
+
+if ! installed mongodb; then
+	echo "Installing mongo first"
+	$SCRIPT_HOME/mongoInstallOrUpgrade.sh
+fi
+
 
 if [[ $(id -u) != 0 ]]; then
 	echo "Restarting as root"

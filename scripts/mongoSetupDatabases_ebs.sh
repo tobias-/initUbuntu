@@ -10,7 +10,12 @@ fi
 if [ -b /dev/xvdd ] && [ -b /dev/xvdj ] && [ -b /dev/xvdl ]; then
 	echo "All ebs 'drives' found"
 else
-	echo "One or more EBS 'drives' missing"
+	instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+	zone=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+	region=${zone%?}
+	echo "One or more EBS 'drives' missing."
+	echo "You should probably run (from your local machine)"
+	echo "./mongoCreateEbsVolumes.sh ${region} $instanceId"
 	exit 1
 fi
 

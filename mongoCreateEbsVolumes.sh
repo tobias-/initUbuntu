@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -eu
 
 echo "This command should probably be run on your desktop client to avoid putting dangerous keys on server."
 echo "Confirm that you know this (Enter continue & Ctrl-C to abort)"

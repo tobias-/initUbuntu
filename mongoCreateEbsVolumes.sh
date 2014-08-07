@@ -69,4 +69,8 @@ aws --region $region ec2 attach-volume --volume-id $dbVolId --instance-id $insta
 aws --region $region ec2 attach-volume --volume-id $journalVolId --instance-id $instanceId --device xvdj
 aws --region $region ec2 attach-volume --volume-id $logVolId --instance-id $instanceId --device xvdl
 
+aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdd\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
+aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdj\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
+aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdl\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
+
 echo "Setup complete without errors now run setupMongoDB on server"

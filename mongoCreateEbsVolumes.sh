@@ -63,6 +63,9 @@ logVolId=$(aws --region $region ec2 create-volume --size $logSize --volume-type 
 echo "dbVolId: $dbVolId"
 echo "journalVolId: $journalVolId"
 echo "logVolId: $logVolId"
+echo
+echo "Sleeping 30 secs for volume to be available"
+sleep 30
 
 aws --region $region ec2 attach-volume --volume-id $dbVolId --instance-id $instanceId --device xvdd
 aws --region $region ec2 attach-volume --volume-id $journalVolId --instance-id $instanceId --device xvdj
@@ -72,4 +75,4 @@ aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --b
 aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdj\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
 aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdl\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
 
-echo "Setup complete without errors now run setupMongoDB on server"
+echo "Setup complete without errors now run ./mongoSetupDatabases.sh on server"

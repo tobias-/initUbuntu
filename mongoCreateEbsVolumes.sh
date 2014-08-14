@@ -19,7 +19,6 @@ if ! which aws >/dev/null; then
 	fi
 fi
 
-
 if [[ $# -ne 2 ]]; then
 	echo "Usage: $0 <region> <instanceId>"
 	exit 1
@@ -38,7 +37,7 @@ read -p "How large do you want log directory in GiB? " -e -i 20 logSize
 
 read -p "Guaranteed iops (0% for disable)? " -e -i 0% iops
 
-ebsType=standard
+ebsType=gp2
 dbIops=
 journalIops=
 percentage=${iops%%%}
@@ -52,7 +51,7 @@ fi
 echo "Doing dry-run"
 aws --region $region ec2 create-volume --size $dbSize --volume-type $ebsType --availability-zone $zone $dbIops --dry-run || true
 aws --region $region ec2 create-volume --size $journalSize --volume-type $ebsType --availability-zone $zone $journalIops --dry-run || true
-aws --region $region ec2 create-volume --size $logSize --volume-type standard --availability-zone $zone --dry-run || true
+aws --region $region ec2 create-volume --size $logSize --volume-type gp2 --availability-zone $zone --dry-run || true
 
 read -p "If all you have above is dry-run errors, creation will probably work. (Enter to continue, Ctrl-C to abort)" 
 

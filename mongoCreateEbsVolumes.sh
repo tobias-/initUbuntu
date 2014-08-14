@@ -10,7 +10,7 @@ SCRIPT_HOME="$(readlink -f "$(dirname "$(readlink -f "$0")")")"
 
 . $SCRIPT_HOME/scripts/functions.bash
 
-if ! installed awscli; then
+if ! which aws >/dev/null; then
 	sudo apt-get install awscli
 	if [ -d ~/.aws ]; then
 		echo "Configure aws now."

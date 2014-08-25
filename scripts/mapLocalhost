@@ -1,19 +1,23 @@
 #!/bin/bash -eu
 # Make sure there's at least SOMETHING mapped to ip or Ubuntu gets cranky
 
-hostname=$(hostname)
+fqdn=$(fqdn)
 if test -s /etc/mailname; then
-	hostname=`cat /etc/mailname`
+	fqdn=`cat /etc/mailname`
 fi
 ip=$(ifconfig eth0 | grep "^ *inet " | sed -e 's/ B.*//' -e 's/.*://')
-if ! perl -MSocket -e "gethostbyname('$hostname') || exit 1"; then
+if ! perl -MSocket -e "gethostbyname('$fqdn') || exit 1"; then
 	if grep -q "^$ip" /etc/hosts; then
+		if grep -qF "$fqdn" /etc/hosts; then
+			sed "s/ $fqdn//g" -i /etc/hosts
+		fi
+		hostname=${fqdn%%.*}
 		if grep -qF "$hostname" /etc/hosts; then
 			sed "s/ $hostname//g" -i /etc/hosts
 		fi
 		# just add hostname
-		sed "/^$ip:/ s/\$/ $hostname/" /etc/hosts
+		sed "/^$ip:/ s/\$/ $hostname $fqdn/" /etc/hosts
 	else
-		echo -e "\n$ip $hostname" >> /etc/hosts
+		echo -e "\n$ip $fqdn" >> /etc/hosts
 	fi
 fi

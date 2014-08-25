@@ -21,15 +21,19 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 
 	condCp localBin /usr/local/bin
 
-	if ! installed libdigest-hmac-perl; then
-		apt-get install libdigest-hmac-perl
-	fi
-
 	locale-gen en_US.UTF-8 sv_SE.UTF-8
 	dpkg-reconfigure locales
 
 	apt-get update
 	apt-get -u dist-upgrade
+
+	if ! installed libdigest-hmac-perl; then
+		apt-get install libdigest-hmac-perl
+	fi
+
+	if ! installed libhttp-date-perl; then
+		apt-get install libhttp-date-perl
+	fi
 
 	if false && [ ! -x /usr/local/bin/aws-rb ]; then
 		add-apt-repository ppa:brightbox/ruby-ng

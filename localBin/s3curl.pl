@@ -12,11 +12,11 @@
 # for the specific language governing permissions and limitations under the License.
 
 use strict;
-use POSIX;
 
 # you might need to use CPAN to get these modules.
 # run perl -MCPAN -e "install <module>" to get them.
 
+use HTTP::Date;
 use Digest::HMAC_SHA1;
 use Digest::MD5;
 use FindBin;
@@ -193,7 +193,7 @@ for (my $i=0; $i<@ARGV; $i++) {
             "partNumber", "policy", "requestPayment", "response-cache-control",
             "response-content-disposition", "response-content-encoding", "response-content-language",
             "response-content-type", "response-expires", "torrent",
-            "uploadId", "uploads", "versionId", "versioning", "versions", "website", "lifecycle", "restore") {
+            "uploadId", "uploads", "versionId", "versioning", "versions", "website", "lifecycle") {
             if ($query =~ /(?:^|&)($attribute(?:=[^&]*)?)(?:&|$)/) {
                 push @attributes, uri_unescape($1);
             }
@@ -235,7 +235,7 @@ foreach (sort (keys %xamzHeaders)) {
     $xamzHeadersToSign .= "$_:$headerValue\n";
 }
 
-my $httpDate = POSIX::strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime );
+my $httpDate = time2str();
 my $stringToSign = "$method\n$contentMD5\n$contentType\n$httpDate\n$xamzHeadersToSign$resource";
 
 debug("StringToSign='" . $stringToSign . "'");

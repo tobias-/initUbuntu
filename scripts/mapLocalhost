@@ -2,9 +2,15 @@
 # Make sure there's at least SOMETHING mapped to ip or Ubuntu gets cranky
 
 hostname=$(hostname)
+if test -s /etc/mailname; then
+	hostname=`cat /etc/mailname`
+fi
 ip=$(ifconfig eth0 | grep "^ *inet " | sed -e 's/ B.*//' -e 's/.*://')
 if ! perl -MSocket -e "gethostbyname('$hostname') || exit 1"; then
 	if grep -q "^$ip" /etc/hosts; then
+		if grep -qF "$hostname" /etc/hosts; then
+			sed "s/ $hostname//g" -i /etc/hosts
+		fi
 		# just add hostname
 		sed "/^$ip:/ s/\$/ $hostname/" /etc/hosts
 	else

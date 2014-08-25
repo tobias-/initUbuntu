@@ -21,6 +21,10 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 
 	condCp localBin /usr/local/bin
 
+	if ! installed libdigest-hmac-perl; then
+		apt-get install libdigest-hmac-perl
+	fi
+
 	locale-gen en_US.UTF-8 sv_SE.UTF-8
 	dpkg-reconfigure locales
 

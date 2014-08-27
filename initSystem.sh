@@ -95,7 +95,7 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		echo dG1wCiouc3dwCnF1ZXVlCg== | base64 -d >.gitignore
 		git add .
 		git commit -m "Initial commit"
-		echo '* * * * * cd /etc ; git reset master ; git add . ; git commit -q -a -m "Crontabbed update" >/dev/null' >/etc/cron.d/etc_git
+		echo '* * * * * root cd /etc ; git reset master ; git add . ; git commit -q -a -m "Crontabbed update" >/dev/null' >/etc/cron.d/etc_git
 	fi
 
 fi

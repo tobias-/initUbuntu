@@ -91,7 +91,7 @@ else
 		if ! mount | grep -qF '/mnt'; then
 			mkfs.ext4 /dev/xvdb
 			mount /dev/xvdb /mnt
-			cp $SCRIPT_HOME/mount-local-storage.conf /etc/init/
+			cp $SCRIPT_HOME/scripts/mount-local-storage.conf /etc/init/
 			chown root:root /etc/init/mount-local-storage.conf
 		fi
 		mkdir -p /log

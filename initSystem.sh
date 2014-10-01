@@ -98,6 +98,12 @@ if [[ -z ${1:-} ]] || [[ $1 != $key ]]; then
 		echo '* * * * * root cd /etc ; git reset master ; git add . ; git commit -q -a -m "Crontabbed update" >/dev/null' >/etc/cron.d/etc_git
 	fi
 
+	cp /etc/mailname /etc/hostname
+	$hostname=$(cat /etc/hostname)
+	if ! perl -MSocket -le 'if (inet_aton shift) { exit 0; } exit 1;' $hostname; then
+		sed -r "s/^(127.0.0.1.*)/\\1 $hostname/" -i /etc/hosts
+	fi
+
 fi
 
 aptGet() {

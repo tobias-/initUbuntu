@@ -5,7 +5,7 @@
 packer=gzip
 host=127.0.0.1
 backup="s3://###############/backup/$(date +%Y)/$(date +%m)/"
-region="us-west-1"
+region="us-east-1"
 backup_dir="/log/backup"
 
 export LC_ALL="en_US.UTF-8"
@@ -89,7 +89,7 @@ wait
 echo "Backup dumped $dump_dir"
 find "$dump_dir" -type f -print0 | xargs -0 $packer
 echo "Packed $dump_dir"
-s3_url="$backup/"
+s3_url="$backup"
 s3cmd sync "$dump_dir"  "$s3_url"
 echo "Backup uploaded correctly"
 assert_uploaded "$s3_url$dump_dir"

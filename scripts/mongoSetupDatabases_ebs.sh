@@ -53,7 +53,9 @@ mount /log
 
 chown -R mongodb:mongodb /log /journal /data
 ln -s /journal /data/journal
-
+mkdir -p /log/backup
+chown -R ubuntu:ubuntu /log/backup
+ln -s /log/backup /backup
 
 echo "Setup complete without errors"
 

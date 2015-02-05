@@ -51,7 +51,7 @@ case $cs in
 	;;
 esac
 
-read -p "Size of the /log directory in GiB? " -e -i 20 logSize
+read -p "Size of the /log+/backup directory in GiB? " -e -i $dbSize logSize
 read -p "Guaranteed iops (0% for disable)? " -e -i 0% iops
 
 ebsType=gp2

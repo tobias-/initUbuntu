@@ -39,20 +39,29 @@ echo
 echo "Creating filesystems. This may take a while"
 echo
 mkfs.ext4 -q /dev/xvdd -L mongoData &
-mkfs.ext4 -q /dev/xvdj -L mongoJournal &
+if [ -d /dev/xvdj ]; then
+	mkfs.ext4 -q /dev/xvdj -L mongoJournal &
+fi
 mkfs.ext4 -q /dev/xvdl -L mongoLog &
 wait
 busywait /dev/xvdd
-busywait /dev/xvdj
+if [ -d /dev/xvdj ]; then
+	busywait /dev/xvdj
+fi
 busywait /dev/xvdl
 
 echo "Mounting filesystems"
 mount /data
-mount /journal
+if [ -d /dev/xvdj ]; then
+	mount /journal
+fi
 mount /log
 
-chown -R mongodb:mongodb /log /journal /data
-ln -s /journal /data/journal
+chown -R mongodb:mongodb /log /data
+if [ -d /dev/xvdj ]; then
+	chown -R mongodb:mongodb /journal
+	ln -s /journal /data/journal
+fi
 mkdir -p /log/backup
 chown -R ubuntu:ubuntu /log/backup
 ln -s /log/backup /backup

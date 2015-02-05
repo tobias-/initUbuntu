@@ -22,9 +22,11 @@ fi
 if ! grep -q "mongoData" /etc/fstab; then
 	cat >>/etc/fstab <<EOF
 LABEL=mongoData /data ext4 nobootwait,defaults,auto,noatime,noexec 0 0
-LABEL=mongoJournal /journal ext4 nobootwait,defaults,auto,noatime,noexec 0 0
 LABEL=mongoLog /log ext4 nobootwait,defaults,auto,noatime,noexec 0 0
 EOF
+	if [ -d /dev/xvdj ]; then
+		echo 'LABEL=mongoJournal /journal ext4 nobootwait,defaults,auto,noatime,noexec 0 0' >>fstab
+	fi
 fi
 
 mkdir -p /log /journal /data

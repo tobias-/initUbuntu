@@ -31,10 +31,27 @@ echo "This host's Instance Id: $instanceId"
 zone=$(aws --region $region ec2 describe-instances  | $SCRIPT_HOME/scripts/getAZ.groovy $instanceId)
 echo Availability zone: $zone
 
-read -p "How large do you want your database in GiB? " -e -i 400 dbSize
-read -p "How large do you want your journal in GiB? " -e -i 25 journalSize
-read -p "How large do you want log directory in GiB? " -e -i 20 logSize
 
+echo
+echo "To be able to use EBS snapshot backups, combined database and log volume is required."
+echo "Separate partitions are faster than combined"
+read -p 'Use [C]ombined or [S]eparate database and log volumes? (S/C) ' cs
+case $cs in
+[Ss])
+	read -p "Size of the database in GiB? " -e -i 400 dbSize
+	read -p "Size of the journal in GiB? " -e -i 25 journalSize
+	;;
+[Cc])
+	read -p "Size of the journal+database in GiB? " -e -i 400 dbSize
+	journalSize=0
+	;;
+*)
+	echo "You failed"
+	exit 1
+	;;
+esac
+
+read -p "Size of the /log directory in GiB? " -e -i 20 logSize
 read -p "Guaranteed iops (0% for disable)? " -e -i 0% iops
 
 ebsType=gp2
@@ -50,29 +67,39 @@ fi
 
 echo "Doing dry-run"
 aws --region $region ec2 create-volume --size $dbSize --volume-type $ebsType --availability-zone $zone $dbIops --dry-run || true
-aws --region $region ec2 create-volume --size $journalSize --volume-type $ebsType --availability-zone $zone $journalIops --dry-run || true
-aws --region $region ec2 create-volume --size $logSize --volume-type gp2 --availability-zone $zone --dry-run || true
+aws --region $region ec2 create-volume --size $logSize --volume-type $ebsType --availability-zone $zone --dry-run || true
+if [[ $journalSize -gt 0 ]]; then
+	aws --region $region ec2 create-volume --size $journalSize --volume-type $ebsType --availability-zone $zone $journalIops --dry-run || true
+fi
 
 read -p "If all you have above is dry-run errors, creation will probably work. (Enter to continue, Ctrl-C to abort)" 
 
 
 dbVolId=$(aws --region $region ec2 create-volume --size $dbSize --volume-type $ebsType --availability-zone $zone $dbIops | grep '"VolumeId":' | egrep -o 'vol-[^"]+')
-journalVolId=$(aws --region $region ec2 create-volume --size $journalSize --volume-type $ebsType --availability-zone $zone $journalIops | grep '"VolumeId":' | egrep -o 'vol-[^"]+')
-logVolId=$(aws --region $region ec2 create-volume --size $logSize --volume-type standard --availability-zone $zone | grep '"VolumeId":' | egrep -o 'vol-[^"]+')
+logVolId=$(aws --region $region ec2 create-volume --size $logSize --volume-type $ebsType --availability-zone $zone | grep '"VolumeId":' | egrep -o 'vol-[^"]+')
+if [[ $journalSize -gt 0 ]]; then
+	journalVolId=$(aws --region $region ec2 create-volume --size $journalSize --volume-type $ebsType --availability-zone $zone $journalIops | grep '"VolumeId":' | egrep -o 'vol-[^"]+')
+fi
 
 echo "dbVolId: $dbVolId"
 echo "journalVolId: $journalVolId"
-echo "logVolId: $logVolId"
+if [[ $journalSize -gt 0]]; then
+	echo "logVolId: $logVolId"
+fi
 echo
 echo "Sleeping 30 secs for volume to be available"
 sleep 30
 
 aws --region $region ec2 attach-volume --volume-id $dbVolId --instance-id $instanceId --device xvdd
-aws --region $region ec2 attach-volume --volume-id $journalVolId --instance-id $instanceId --device xvdj
 aws --region $region ec2 attach-volume --volume-id $logVolId --instance-id $instanceId --device xvdl
+if [[ $journalSize -gt 0 ]]; then
+	aws --region $region ec2 attach-volume --volume-id $journalVolId --instance-id $instanceId --device xvdj
+fi
 
 aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdd\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
-aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdj\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
 aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdl\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
+if [[ $journalSize -gt 0 ]]; then
+	aws --region $region ec2 modify-instance-attribute --instance-id $instanceId --block-device-mappings "[{\"DeviceName\": \"xvdj\",\"Ebs\":{\"DeleteOnTermination\":true}}]"
+fi
 
 echo "Setup complete without errors now run ./mongoSetupDatabases.sh on server"

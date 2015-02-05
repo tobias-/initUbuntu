@@ -7,7 +7,7 @@ if [[ $(id -u) != 0 ]]; then
 	exit 1
 fi
 
-if [ -b /dev/xvdd ] && [ -b /dev/xvdj ] && [ -b /dev/xvdl ]; then
+if [ -b /dev/xvdd ] && [ -b /dev/xvdl ]; then
 	echo "All ebs 'drives' found"
 else
 	instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)

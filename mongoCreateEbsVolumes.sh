@@ -82,9 +82,9 @@ if [[ $journalSize -gt 0 ]]; then
 fi
 
 echo "dbVolId: $dbVolId"
-echo "journalVolId: $journalVolId"
-if [[ $journalSize -gt 0]]; then
-	echo "logVolId: $logVolId"
+echo "logVolId: $logVolId"
+if [[ $journalSize -gt 0 ]]; then
+	echo "journalVolId: $journalVolId"
 fi
 echo
 echo "Sleeping 30 secs for volume to be available"

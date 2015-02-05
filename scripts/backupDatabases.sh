@@ -29,7 +29,7 @@ checkInstalledCorrectly() {
     echo "Install and configure s3cmd"
     echo "Installation:"
     echo "sudo yum install python-pip python-dateutil && sudo pip install s3cmd python-magic"
-    echo "sudo apt-get install python-pip python-dateutil python-magic && sudo pip install s3cmd"
+    echo "sudo apt-get install python-pip python-dateutil python-magic && sudo easy_install -U setuptools && sudo pip install s3cmd"
     echo "Configuration:"
     echo "(As the backup user) s3cmd --configure"
     exit 2

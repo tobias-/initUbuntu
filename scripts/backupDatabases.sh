@@ -90,7 +90,7 @@ echo "Backup dumped $dump_dir"
 find "$dump_dir" -type f -print0 | xargs -0 $packer
 echo "Packed $dump_dir"
 s3_url="$backup"
-s3cmd sync "$dump_dir"  "$s3_url"
+s3cmd sync --region="$region" "$dump_dir"  "$s3_url"
 echo "Backup uploaded correctly"
 assert_uploaded "$s3_url$dump_dir"
 rm -rf "$dump_dir"

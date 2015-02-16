@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# URL Cronic - fetch url and output errors
+# Public Domain CC0: http://creativecommons.org/publicdomain/zero/1.0/
+
+set -u
+
+OUT=`mktemp /tmp/cronic.out.$$.XXXXXXXX`
+ERR=`mktemp /tmp/cronic.out.$$.XXXXXXXX`
+
+url="$1"
+
+wget -O "$OUT" "$url" 2>$ERR 1>&2
+RESULT=$?
+
+if [[ $RESULT -ne 0 ]]; then
+	echo "URL Cronic detected failure or error output for the url:"
+	echo "$url"
+	echo
+	echo "RESULT CODE: $RESULT"
+	echo
+	echo "ERROR:"
+	cat "$ERR"
+	echo
+	echo "OUTPUT:"
+	cat "$OUT"
+fi
+
+rm -f "$OUT" "$ERR"
+
